@@ -1,17 +1,3 @@
-variable "metricAlerts" {
-  type = map(object({
-    alertName                  = string
-    alertScopes                = list(string)
-    alertDescription           = string
-    alertEnabled               = bool
-    alertAutoMitigate          = bool
-    alertFrequency             = string
-    alertTargetResourceType    = string
-    alertTargetResourceLoc     = string
-    criteria                   = map(string)
-  }))
-  default = {}
-}
 
 variable "metricAlerts" {
   type = map(object({
