@@ -1,11 +1,16 @@
 metricAlerts = {
   "AppGtwy" = {
+    alertAutoMitigate          = "true"
+    alertFrequency             = "PT1M"
+    alertTargetResourceType    = "Microsoft.Network/applicationGateways"
+    alertTargetResourceLoc     = "WestUS2"
     alertName              = "appgwty-alert"
     alertScopes = ["/subscriptions/105294a7-6583-4501-b4e9-106e979d05e9/resourceGroups/test/providers/Microsoft.Network/applicationGateways/appgtwy"]
     alertDescription           = "testdemo"
     alertEnabled               = "true"
     dynamic_criteria      = [
       {
+
         aggregation              = "Total"
         alert_sensitivity        = "High"
         evaluation_failure_count = 4
@@ -39,4 +44,3 @@ metricAlerts = {
     ]
   }
 }
-
