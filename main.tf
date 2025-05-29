@@ -3,12 +3,15 @@ resource "azurerm_resource_group" "example" {
   location = "WestUS2"
 }
 
-
 resource "azurerm_monitor_metric_alert" "alert" {
   for_each                 = var.metricAlerts
   name                     = each.value.alertName
-  resource_group_name      = azurerm_resource_group.example.name
-  scopes                   = each.value.alertScopes
+  resource_group_name      = azurerm_resource_group.main.name
+  scopes = [
+    # azurerm_monitor_workspace.main.id,
+    data.azurerm_mysql_flexible_server.mysql[each.key].id,
+    data.azurerm_kubernetes_cluster.main[each.key].id
+  ]
   description              = each.value.alertDescription
   enabled                  = each.value.alertEnabled
   auto_mitigate            = each.value.alertAutoMitigate
@@ -37,30 +40,4 @@ resource "azurerm_monitor_metric_alert" "alert" {
     }
 
    }
-  dynamic "dynamic_criteria" {
-    for_each = each.value.dynamic_criteria
-    content {
-      metric_namespace = dynamic_criteria.value.metric_namespace
-      metric_name      = dynamic_criteria.value.metric_name
-
-      aggregation = dynamic_criteria.value.aggregation
-      operator    = dynamic_criteria.value.operator
-
-      alert_sensitivity        = dynamic_criteria.value.alert_sensitivity
-      evaluation_total_count   = dynamic_criteria.value.evaluation_total_count
-      evaluation_failure_count = dynamic_criteria.value.evaluation_failure_count
-      ignore_data_before       = dynamic_criteria.value.ignore_data_before
-
-      skip_metric_validation = dynamic_criteria.value.skip_metric_validation
-
-      dynamic "dimension" {
-        for_each = dynamic_criteria.value.dimension
-        content {
-          name     = dimension.value.name
-          operator = dimension.value.operator
-          values   = dimension.value.values
-        }
-      }
-    }
-  }
 }
