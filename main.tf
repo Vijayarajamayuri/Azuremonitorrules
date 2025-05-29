@@ -3,14 +3,14 @@ resource "azurerm_resource_group" "example" {
   location = "WestUS2"
 }
 
+
+
 resource "azurerm_monitor_metric_alert" "alert" {
   for_each                 = var.metricAlerts
   name                     = each.value.alertName
-  resource_group_name      = azurerm_resource_group.main.name
+  resource_group_name      = azurerm_resource_group.example.name
   scopes = [
-    # azurerm_monitor_workspace.main.id,
-    data.azurerm_mysql_flexible_server.mysql[each.key].id,
-    data.azurerm_kubernetes_cluster.main[each.key].id
+    data.azurerm_mysql_flexible_server.mysql[each.key].id
   ]
   description              = each.value.alertDescription
   enabled                  = each.value.alertEnabled
